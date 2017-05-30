@@ -94,3 +94,5 @@ c:\users\kristina shalkoska\documents\visual studio 2017\Projects\ContactWeb\Con
 c:\users\kristina shalkoska\documents\visual studio 2017\Projects\ContactWeb\ContactWeb\obj\Debug\ContactWeb.csprojResolveAssemblyReference.cache
 c:\users\kristina shalkoska\documents\visual studio 2017\Projects\ContactWeb\ContactWeb\obj\Debug\ContactWeb.dll
 c:\users\kristina shalkoska\documents\visual studio 2017\Projects\ContactWeb\ContactWeb\obj\Debug\ContactWeb.pdb
+C:\Users\Kristina Shalkoska\Documents\Visual Studio 2017\Projects\ContactWeb\ContactWeb\obj\Debug\ContactWeb.Migrations.InitialCreate.resources
+C:\Users\Kristina Shalkoska\Documents\Visual Studio 2017\Projects\ContactWeb\ContactWeb\obj\Debug\ContactWeb.csproj.GenerateResource.Cache

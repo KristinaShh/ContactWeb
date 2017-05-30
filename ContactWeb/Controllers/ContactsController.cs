@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ContactWeb.Models;
+using Microsoft.AspNet.Identity;
 
 namespace ContactWeb.Controllers
 {
@@ -15,12 +16,23 @@ namespace ContactWeb.Controllers
         private ContactWebContext db = new ContactWebContext();
 
         // GET: Contacts
+        [Authorize]
         public ActionResult Index()
         {
-            return View(db.Contacts.ToList());
+            try
+            {
+                var userId = GetCurrentUserId();
+                return View(db.Contacts.Where(x => x.UserId == userId).ToList());
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         // GET: Contacts/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,6 +48,7 @@ namespace ContactWeb.Controllers
         }
 
         // GET: Contacts/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -59,6 +72,7 @@ namespace ContactWeb.Controllers
         }
 
         // GET: Contacts/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,6 +92,7 @@ namespace ContactWeb.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "Id,UserId,FirstName,LastName,Email,PhonePrimary,PhoneSecondary,Birthday,StreetAddress1,StreetAddress2,City,State,Zip")] Contact contact)
         {
             if (ModelState.IsValid)
@@ -90,6 +105,7 @@ namespace ContactWeb.Controllers
         }
 
         // GET: Contacts/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -122,6 +138,15 @@ namespace ContactWeb.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public Guid GetCurrentUserId()
+        {
+            return new Guid(User.Identity.GetUserId());
+        }
+        private bool EnsureIsUserContact(Contact contact)
+        {
+            return contact.UserId == GetCurrentUserId();
         }
     }
 }
