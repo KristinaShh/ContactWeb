@@ -40,7 +40,7 @@ namespace ContactWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Contact contact = db.Contacts.Find(id);
-            if (contact == null)
+            if (contact == null || !EnsureIsUserContact(contact))
             {
                 return HttpNotFound();
             }
@@ -51,6 +51,7 @@ namespace ContactWeb.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            ViewBag.UserId = GetCurrentUserId();
             return View();
         }
 
@@ -67,7 +68,7 @@ namespace ContactWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.UserId = GetCurrentUserId();
             return View(contact);
         }
 
@@ -80,10 +81,11 @@ namespace ContactWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Contact contact = db.Contacts.Find(id);
-            if (contact == null)
+            if (contact == null || !EnsureIsUserContact(contact))
             {
                 return HttpNotFound();
             }
+            ViewBag.UserId = GetCurrentUserId();
             return View(contact);
         }
 
@@ -101,6 +103,7 @@ namespace ContactWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.UserId = GetCurrentUserId();
             return View(contact);
         }
 
@@ -113,7 +116,7 @@ namespace ContactWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Contact contact = db.Contacts.Find(id);
-            if (contact == null)
+            if (contact == null || !EnsureIsUserContact(contact))
             {
                 return HttpNotFound();
             }
@@ -126,6 +129,10 @@ namespace ContactWeb.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Contact contact = db.Contacts.Find(id);
+            if (!EnsureIsUserContact(contact))
+            {
+                return HttpNotFound();
+            }
             db.Contacts.Remove(contact);
             db.SaveChanges();
             return RedirectToAction("Index");
